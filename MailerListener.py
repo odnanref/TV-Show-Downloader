@@ -32,9 +32,9 @@ class MailerListener(object):
     def update(self, DownloadEvent):
         print " just got event " + DownloadEvent.name
         episode = DownloadEvent.data['episode']
-        message = "Hello this is tvshow Downloader" + \
-        "I found " + episode.get_name() + " for download from season " + \
-        str(episode.get_season()) + " number " + str(episode.get_episode_number()) + "\n"
+        message = "Hello this is tvshow Downloader\n" + \
+        "I found " + episode.get_name() + " for download\n From season: " + \
+        str(episode.get_season()) + "\n Episode number: " + str(episode.get_episode_number()) + "\n"
 
         message += " the magnet url is:\n " + episode.get_magnet()
 
