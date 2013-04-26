@@ -19,6 +19,7 @@ class TVShowConfigurationParser:
 
 class Episode:
 	- Inject the eventDispatcher
+	- has a magnet info field for magnet url and a set_magnet method
 
  DownloadEvent.py 
 	- This list's the download Events by extending the Event in EventDispatcher.py
@@ -34,5 +35,7 @@ Mailer.py
 MailerListener.py
 	- I wanted to get e-mail warning when a new show is available my online computer
 	  is not the same has my download computer
+	- All options must be placed (can be empty) on the config file for this to work
+	- 
 
 
