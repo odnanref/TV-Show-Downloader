@@ -21,6 +21,15 @@ The idea behind this "project" is very, very, (really.) very simple:
 
 Anyway I hope you'll enjoy the thing as much as I do (at least).
 
+Example sections for show's:
+
+[Good Wife, The]
+hd = False
+
+[Greys Anatomy]
+hd = False
+
+
 # Requirements
 Currently, it only uses the feedparser library ; you can find it here:
     http://code.google.com/p/feedparser/
