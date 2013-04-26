@@ -1,0 +1,34 @@
+
+
+#
+# -- Friday April 26 15:17:31 BRT 2013 -- #
+#
+tvshow_downloader.py
+ - Added conf_file property to know what file was used from external objects to TVShowConfiguratorParser
+ - Added a connection to a event dispatcher and Event Listeners class witch can be used 
+	to add new event listeners without touching the main file
+	you can call your downloader from here making a syscall instead of using a run.sh
+ - I injected the TVShowConfiguratorParser object to the EventListerns Object
+	to make it easy to access configuration values
+
+ - class TVShowConfiguratorParser
+	* getGlobal -- Added option to getGlobal config without having to change inner code
+	* get_confFile -- conf file location
+	* parser property to access the parser from other object's 
+
+ DownloadEvent.py 
+	- This list's the download Events by extending the Event in EventDispatcher.py
+	  and added a name property
+
+EventDispatcher.py
+	-  Created by Daniele Esposti on Tue, 19 Oct 2010 (MIT)
+
+Mailer.py
+	- Simple object to send e-mails basically a copy paste from the tutorial
+	  with few changes
+
+MailerListener.py
+	- I wanted to get e-mail warning when a new show is available my online computer
+	  is not the same has my download computer
+
+
