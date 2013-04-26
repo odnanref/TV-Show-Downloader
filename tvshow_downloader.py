@@ -29,6 +29,9 @@ import datetime
 import re
 import os
 import ConfigParser
+import EventDispatcher
+from DownloadEvent import DownloadEvent
+from EventListeners import EventListeners
 
 class TVShowConfigurationParser:
     '''
@@ -45,9 +48,13 @@ class TVShowConfigurationParser:
 
     The global section is required to launch the script.
     '''
+    
+    parser = None # Specifies the current used parser
+
     def __init__(self, conf_file = './tvshow_downloader.cfg'):
         self.global_conf = {}
         self.series      = []
+        self.conf_file = conf_file
 
         parser = ConfigParser.ConfigParser()
         
@@ -57,6 +64,8 @@ class TVShowConfigurationParser:
             parser.set('global', 'magnet_file', '/tmp/magnetz')
             parser.set('global', 'log_file', './.logz_dl')
             parser.write(open('./tvshow_downloader.cfg', 'w'))
+            self.conf_file = './tvshow_downloader.cfg'
+
 
         try:
             # let me extract the required fields
@@ -74,6 +83,9 @@ class TVShowConfigurationParser:
                         'name' : section,
                         'hd' : parser.getboolean(section, 'hd')
                     })
+
+            self.parser = parser
+
         except:
             raise Exception('Your configuration file sucks.')
     
@@ -85,6 +97,13 @@ class TVShowConfigurationParser:
     
     def get_series(self):
         return self.series
+
+    def get_confFile(self):
+        return self.conf_file
+    
+    def getGlobal(self, config):
+        return self.parser.get("global", config)
+        
 
 class Episode:
     '''
@@ -119,9 +138,11 @@ class Episode:
         if match_found == False:
             self.info['season'] = 1337
             self.info['episode'] = 1337
+            self.info['magnet'] = ""
         else:
             self.info['season'] = int(r.group(1), 10)
             self.info['episode'] = int(r.group(2), 10)
+            self.info['magnet'] = ""
     
     def get_name(self):
         return self.name
@@ -134,6 +155,13 @@ class Episode:
 
     def is_an_hd_episode(self):
         return self.info['is_hd']
+
+    def get_magnet(self):
+       return self.info['magnet']
+
+    def set_magnet(self, magnet_url):
+        self.info['magnet'] = magnet_url
+        return self
 
 class DownloadHistory:
     '''
@@ -173,12 +201,15 @@ class TVShows_Manager:
 
     The database is a very basic sqlite3 base, with a table for each serie
     '''
-    def __init__(self, favorite_tv_show, log_file, magnets_file):
+    def __init__(self, favorite_tv_show, log_file, magnets_file, EventDispatcher = None):
         self.fav          = favorite_tv_show
         self.co           = sqlite3.connect('./tvshow_downloader.db')
         self.c            = self.co.cursor()
         self.logger       = DownloadHistory(log_file)
         self.magnets_file = magnets_file
+
+        if EventDispatcher != None:
+            self.dispatcher   = EventDispatcher
 
         # initialize the tables
         for show in self.fav:
@@ -195,6 +226,14 @@ class TVShows_Manager:
                     date INTEGER
                 )''' % show['name'])
             self.co.commit()
+
+    def setDispatcher(self, EventDispatcher):
+        '''
+        Set the event dispatcher
+        '''
+        self.dispatcher = EventDispatcher
+
+        return self
 
     def __parse_bt_chat(self, tv_show):
         '''
@@ -329,9 +368,23 @@ class TVShows_Manager:
                     time.time()
                 )
 
+                self.dispatcher.dispatch_event(
+                        DownloadEvent ( DownloadEvent.PRESAVE, last_ep )
+                        )
                 # OK, now I assume you'll start the torrent soon ; we don't want to re-download this file again
                 self.c.execute('INSERT INTO "%s" VALUES(NULL, ?, ?, ?, ?, ?)' % show['name'], attrs)
                 self.co.commit()
+                
+                self.dispatcher.dispatch_event(
+                        DownloadEvent ( DownloadEvent.POSTSAVE, last_ep )
+                        )
+                
+                last_ep['episode'].set_magnet(magnet_uri) # send the magnet uri to listeners
+
+                self.dispatcher.dispatch_event(
+                        DownloadEvent ( DownloadEvent.DOWNLOAD_READY, last_ep )
+                        )
+
                 nb_files_down += 1
 
         file_magnets.close()
@@ -365,12 +418,19 @@ def main(argc, argv):
         print str(e)
 
     try:
+        event_listeners = EventListeners(conf_manager)
+        for Type, listener in event_listeners.Listeners.iteritems():
+                dispatcher.add_event_listener(Type, listener)
+        
         # OK, get ready to checkout!
         shows_manager = TVShows_Manager(
             conf_manager.get_series(),
             conf_manager.get_log_file(),
             conf_manager.get_magnet_file()
         )
+        # set the event dispatcher
+        shows_manager.setDispatcher(dispatcher)
+
     except Exception, e:
         print 'An important exception has been raised: ' + str(e)
 
@@ -378,4 +438,5 @@ def main(argc, argv):
     return 1
 
 if __name__ == '__main__':
+    dispatcher      = EventDispatcher.EventDispatcher()
     sys.exit(main(len(sys.argv), sys.argv))
