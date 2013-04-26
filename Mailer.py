@@ -72,6 +72,6 @@ class Mailer(object):
         if len(self.username) > 0 and len(self.password) > 0 :
             s.login(self.username, self.password)
 
-        s.sendmail(self.Source, [self.Destination], msg.as_string())
+        s.sendmail(self.Source, [self.Destination], self.msg.as_string())
         s.quit()
 
