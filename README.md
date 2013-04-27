@@ -1,4 +1,11 @@
 # What the hell is this thing ?
+
+**This was changed from the code of Overclock**
+* I added e-mail notification of new download via a MailerListener added to a EventDispacher
+witch allow's me to add new features easily over time. *(Also I wanted to test Python)*
+
+* Details can be seen in the CHANGELOG
+
 Maybe you're a guy a bit like me -- who watch a *lot* of series -- so I guess you already know that downloading the latest episodes of all your favorites TV Shows is absolutely PAINFUL. I mean it, really.
 
 Each serie is released always the same day each week ; but obviously it's hard to remember the release day of all your shows (by the way, sometimes they make a little break, so you won't have episode during 2/3 months).
@@ -21,13 +28,15 @@ The idea behind this "project" is very, very, (really.) very simple:
 
 Anyway I hope you'll enjoy the thing as much as I do (at least).
 
-Example sections for show's:
+##Example sections for Tv Shows:
 
-[Good Wife, The]
-hd = False
 
-[Greys Anatomy]
-hd = False
+    [Good Wife, The]
+    	hd = False
+
+
+	[Greys Anatomy]
+		hd = False
 
 
 # Requirements
