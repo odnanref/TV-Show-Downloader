@@ -20,6 +20,7 @@
 #
 
 import sys
+import os
 from feedparser import parse
 from urllib import urlencode
 import urllib2
@@ -28,6 +29,7 @@ import time
 import datetime
 import re
 import os
+import traceback
 import ConfigParser
 import EventDispatcher
 from DownloadEvent import DownloadEvent
@@ -54,20 +56,23 @@ class TVShowConfigurationParser:
     def __init__(self, conf_file = './tvshow_downloader.cfg'):
         self.global_conf = {}
         self.series      = []
-        self.conf_file = conf_file
+
+        if conf_file == './tvshow_downloader.cfg':
+            self.conf_file = os.getcwd() + "/config/" + conf_file
+        else:
+            self.conf_file = conf_file
 
         parser = ConfigParser.ConfigParser()
         
         # we create the file if it doesn't exist: too kind yeah.
-        if len(parser.read(conf_file)) == 0:
+        if len(parser.read(self.conf_file)) == 0:
             parser.add_section('global')
             parser.set('global', 'magnet_file', '/tmp/magnetz')
             parser.set('global', 'log_file', './.logz_dl')
-            parser.write(open('./tvshow_downloader.cfg', 'w'))
-            self.conf_file = './tvshow_downloader.cfg'
-
+            parser.write(open(self.conf_file, 'w'))
 
         try:
+            self.parser = parser
             # let me extract the required fields
             self.global_conf['magnet_file'] = parser.get('global', 'magnet_file')
             self.global_conf['log_file'] = parser.get('global', 'log_file')
@@ -83,9 +88,6 @@ class TVShowConfigurationParser:
                         'name' : section,
                         'hd' : parser.getboolean(section, 'hd')
                     })
-
-            self.parser = parser
-
         except:
             raise Exception('Your configuration file sucks.')
     
@@ -438,5 +440,7 @@ def main(argc, argv):
     return 1
 
 if __name__ == '__main__':
+    script_path = os.path.realpath(__file__)
+    os.chdir(os.path.dirname(script_path))
     dispatcher      = EventDispatcher.EventDispatcher()
     sys.exit(main(len(sys.argv), sys.argv))
