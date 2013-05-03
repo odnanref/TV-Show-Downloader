@@ -6,6 +6,7 @@
 # Send alert e-mail
 # ---------------------------
 
+import traceback
 import DownloadEvent
 from Mailer import Mailer
 
@@ -76,4 +77,6 @@ class MailerListener(object):
 
         except Exception, e:
             print 'Exception raised MailerListener config\n dependency related: ' + str(e)
+            tb = traceback.format_exc()
+            print tb
 
