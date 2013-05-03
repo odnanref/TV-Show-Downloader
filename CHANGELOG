@@ -1,4 +1,28 @@
 
+#
+# -- Fri May 3 19:38:44 2013 -0300 --
+#
+
+Author: Fernando Andre <netriver@gmail.com>
+Date:   Fri May 3 19:38:44 2013 -0300
+
+    1 - obtain script directory and use that has the working path
+    2 - tvshow_downloader.cfg moved to ./config directory when it's the default file name
+    3 - using the self.conf_file after the variable conf_file is tested
+    4 - using self.conf_file for interactions with the file
+    5 - moved self.parser = parser to inside the try statement
+
+commit 0eecb39aeabfe3752dae060bf64fd75f50aa3eff
+Author: Fernando Andre <netriver@gmail.com>
+Date:   Fri May 3 19:36:02 2013 -0300
+
+    added option to pass a configuration parser
+
+commit c7c82b937bb7012c457bc4e6a60c54b7e3e1bd2f
+Author: Fernando Andre <netriver@gmail.com>
+Date:   Fri May 3 19:33:31 2013 -0300
+
+    added a traceback for the file
 
 #
 # -- Friday April 26 15:17:31 BRT 2013 -- #
