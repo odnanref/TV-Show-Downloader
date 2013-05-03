@@ -11,8 +11,8 @@ witch allow's me to add new features easily over time. *(Also I wanted to test P
 3. using the self.conf_file after the variable conf_file is tested
 4. using self.conf_file for interactions with the file
 5. moved self.parser = parser to inside the try statement
-6. EventDispatcher and EventListeners file (the last to load the listeners) allows to easy add a funtionality
-7. MailerListener Mailer .py files to send alert when a new version is available online
+6. **EventDispatcher** and EventListeners file (the last to load the listeners) allows to easy add a funtionality
+7. **MailerListener Mailer .py** files to send alert e-mails when a new version is available online
 
 ### What the Hell is this?
 Maybe you're a guy a bit like me -- who watch a *lot* of series -- so I guess you already know that downloading the latest episodes of all your favorites TV Shows is absolutely PAINFUL. I mean it, really.
