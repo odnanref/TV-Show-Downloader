@@ -16,7 +16,10 @@ class EventListeners(object):
         DL.setConfig(ConfManager)
         self.Listeners[DownloadEvent.DOWNLOAD_READY] = DL.update
 
-    def add(self, TYPE, EventListener):
+    def add(self, TYPE, EventListener, ConfManager = None):
+        if ConfManager != None:
+            EventListener.setConfig(ConfManager)
+
         self.Listeners[TYPE] = EventListener
 
     def getAll(self):
