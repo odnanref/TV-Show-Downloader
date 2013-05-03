@@ -4,15 +4,17 @@ witch allow's me to add new features easily over time. *(Also I wanted to test P
 
 * Details can be seen in the CHANGELOG
 
- More recent changes listed here:
+## More recent changes listed here:
 
-  1 - obtain script directory and use that has the working path
-  2 - tvshow_downloader.cfg moved to ./config directory when it's the default file name
-  3 - using the self.conf_file after the variable conf_file is tested
-  4 - using self.conf_file for interactions with the file
-  5 - moved self.parser = parser to inside the try statement
+1. obtain script directory and use that has the working path
+2. tvshow_downloader.cfg moved to ./config directory when it's the default file name
+3. using the self.conf_file after the variable conf_file is tested
+4. using self.conf_file for interactions with the file
+5. moved self.parser = parser to inside the try statement
+6. EventDispatcher and EventListeners file (the last to load the listeners) allows to easy add a funtionality
+7. MailerListener Mailer .py files to send alert when a new version is available online
 
-
+### What the Hell is this?
 Maybe you're a guy a bit like me -- who watch a *lot* of series -- so I guess you already know that downloading the latest episodes of all your favorites TV Shows is absolutely PAINFUL. I mean it, really.
 
 Each serie is released always the same day each week ; but obviously it's hard to remember the release day of all your shows (by the way, sometimes they make a little break, so you won't have episode during 2/3 months).
