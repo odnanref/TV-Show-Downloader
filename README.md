@@ -1,6 +1,4 @@
-# What the hell is this thing ?
-
-**This was changed from the code of Overclock**
+# This was changed from the code of Overclock
 * I added e-mail notification of new download via a MailerListener added to a EventDispacher
 witch allow's me to add new features easily over time. *(Also I wanted to test Python)*
 
